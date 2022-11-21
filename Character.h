@@ -1,11 +1,11 @@
 #pragma once
 #include <bits/stdc++.h>
-#include"Character_namespace.h"
+#include"Character_nameset.h"
 #include "Position.h"
 using namespace std;
 
 class Character{
-    private:
+    public:
         int hp;
         int mp;
         string name;
@@ -17,8 +17,11 @@ class Character{
             :hp(hp),mp(mp),pos(pos){
                 name = nameset[num];
         }
-        Character(int hp,int mp,string name,Position posi)
-            :hp(hp),mp(mp),name(name),pos(posi){
-                pos.show();
+        Character(int hp,int mp,string name,Position pos)
+            :hp(hp),mp(mp),name(name),pos(pos){
+        }
+        Character(int hp,int mp,string name,int x,int y)
+            :hp(hp),mp(mp),name(name){
+                pos=Position(x,y);
         }
 };

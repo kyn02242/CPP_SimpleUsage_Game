@@ -5,7 +5,7 @@
 #include "Monster.h"
 #include "Position.h"
 #include "GameMap.h"
-#include <curses.h>
+#include "Game.h"
 
 using namespace std;
 
@@ -13,11 +13,8 @@ using namespace std;
 
 int main(){
     freshing();
-    Player mainplayer(10,10,"이준근",1,3);
-    Monster badone(1,1,"이원진",5,15);
-    Map mainmap(mainplayer,badone);
-    
-    //mainmap.Show_map();
-    
-    return 0;
+    Game game;
+    game.gamemap.Show_map();
+    game.playermove();
+    return 0;    
 }
