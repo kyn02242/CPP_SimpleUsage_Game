@@ -16,6 +16,5 @@ int main(){
     Game game;
     game.gamemap.Show_map();
     game.playermove();
-    cout<<endl;
     return 0;    
 }
