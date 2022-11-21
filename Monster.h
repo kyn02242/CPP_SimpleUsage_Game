@@ -10,7 +10,7 @@ class Monster : public Character{
         friend class Map;
     public:
         Monster()
-            :Character(10,10,"이원진",5,16){        
+            :Character(10,10,"이원진",random_pos()){        
         }
         Monster(int hp,int mp,string name,int x,int y)
             :Character(hp,mp,name,x,y){

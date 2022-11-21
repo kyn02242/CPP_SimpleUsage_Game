@@ -122,6 +122,7 @@ class Game{
             }
             else if(monster.hp<=0){
                 gamemap.monster_num--;
+                logprint(monster.name+"을 무찔렀습니다.");
             }
             gamemap.player_pos = player.pos;
             //player.pos.show();

@@ -9,7 +9,7 @@
 
 using namespace std;
 
-#define gotoxy(x,y) printf("\033[%d;%dH",(x),(y))
+//#define gotoxy(x,y) printf("\033[%d;%dH",(x),(y))
 
 int main(){
     freshing();
