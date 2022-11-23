@@ -12,9 +12,11 @@ using namespace std;
 //#define gotoxy(x,y) printf("\033[%d;%dH",(x),(y))
 
 int main(){
-    freshing();
+    srand(time(NULL));
+    Fresh::freshing(10,100);
     Game game;
-    game.gamemap.Show_map();
     game.playermove();
+    
+    //test TTest;
     return 0;    
 }

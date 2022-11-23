@@ -1,10 +1,13 @@
 #pragma once
 #include <bits/stdc++.h>
-#include "logprint.h"
+#include "Log.h"
 #include "GameMap.h"
 #include "Character.h"
 #include "Player.h"
 #include "Monster.h"
+#include <termio.h>
+
+using namespace std;
 
 int getch(void)
 {
@@ -31,22 +34,30 @@ class Game{
     public:
         Map gamemap;
         Player player;
-        //Monster *monster;
-        Monster monster;
+        int monster_num;
+        vector<Monster> monster;
     public:
         Game()
-            :gamemap(),player(),monster(){
-                freshing();
+            {
+                monster_num = Randomout::zerotomax(5);
+                gamemap = Map(monster_num);
+                Fresh::freshing();
+                monster = vector<Monster>(monster_num);
                 gamemap.player_pos = player.pos;
-                gamemap.monster_pos = monster.pos;
+                cout<<monster_num<<endl;
+                for(int i=0;i<monster_num;i++){
+                    monster[i] = Monster();
+                    cout<<"new Monster"<<monster[i].name<<" "<<monster[i].hp<<endl;
+                }
+                gamemap.Show_map(monster_num);
         }
         void gameover(){
-            freshing();
+            Fresh::freshing();
             cout<<"===============Game Over================="<<endl;
             exit(0);
         }
         void gamewin(){
-            freshing();
+            Fresh::freshing();
             cout<<"===============Game Win================="<<endl;
             exit(0);
         }
@@ -61,72 +72,101 @@ class Game{
             {
             case (119):
                 if(gamemap.game_map[player.pos.x-1][player.pos.y]=="■"){
-                    logprint("위쪽은 벽으로 막혀있습니다.");
+                    Log::logprint("위쪽은 벽으로 막혀있습니다.");
                     break;
                 }
                 if(gamemap.game_map[player.pos.x-1][player.pos.y]=="☎"){
-                    logprint("몬스터를 만났습니다. 서로를 공격합니다.");
-                    logdamage(player,monster);
-                    player.hit(monster);
-                    logdamage(player,monster);
+                    Log::logprint("몬스터를 만났습니다. 서로를 공격합니다.");
+                    for(int i=0;i<monster_num;i++){
+                        if(monster[i].pos.x==player.pos.x-1&&monster[i].pos.y==player.pos.y){
+                            player.hit(monster[i]);
+                            Log::logdamage(player,monster[i]);
+                            break;
+                        }
+                    }
+                    
                     break;
                 }
                 player.pos.up();
-                logprint("위로 이동");
+                Log::logprint("위로 이동");
                 break;
             case (97):
                 if(gamemap.game_map[player.pos.x][player.pos.y-2]=="■"){
-                    logprint("왼쪽은 벽으로 막혀있습니다.");
+                    Log::logprint("왼쪽은 벽으로 막혀있습니다.");
                     break;
                 }
                 if(gamemap.game_map[player.pos.x][player.pos.y-2]=="☎"){
-                    logprint("몬스터를 만났습니다. 서로를 공격합니다.");
-                    player.hit(monster);
-                    logdamage(player,monster);
+                    Log::logprint("몬스터를 만났습니다. 서로를 공격합니다.");
+                    for(int i=0;i<monster_num;i++){
+                        if(monster[i].pos.x==player.pos.x&&monster[i].pos.y==player.pos.y-2){
+                            player.hit(monster[i]);
+                            Log::logdamage(player,monster[i]);
+                            break;
+                        }
+                    }
+                    
                     break;
                 }
                 player.pos.left();
-                logprint("왼쪽으로 이동");
+                Log::logprint("왼쪽으로 이동");
                 break;
             case (115):
                 if(gamemap.game_map[player.pos.x+1][player.pos.y]=="■"){
-                    logprint("아래쪽은 벽으로 막혀있습니다.");
+                    Log::logprint("아래쪽은 벽으로 막혀있습니다.");
                     break;
                 }
                 if(gamemap.game_map[player.pos.x+1][player.pos.y]=="☎"){
-                    logprint("몬스터를 만났습니다. 서로를 공격합니다.");
-                    player.hit(monster);
-                    logdamage(player,monster);
+                    Log::logprint("몬스터를 만났습니다. 서로를 공격합니다.");
+                    for(int i=0;i<monster_num;i++){
+                        if(monster[i].pos.x==player.pos.x+1&&monster[i].pos.y==player.pos.y){
+                            player.hit(monster[i]);
+                            Log::logdamage(player,monster[i]);
+                            break;
+                        }
+                    }
+                    
                     break;
                 }
                 player.pos.down();
-                logprint("아래로 이동");
+                Log::logprint("아래로 이동");
                 break;
             case (100):
                 if(gamemap.game_map[player.pos.x][player.pos.y+2]=="■"){
-                    logprint("오른쪽은 벽으로 막혀있습니다.");
+                    Log::logprint("오른쪽은 벽으로 막혀있습니다.");
                     break;
                 }
                 if(gamemap.game_map[player.pos.x][player.pos.y+2]=="☎"){
-                    logprint("몬스터를 만났습니다. 서로를 공격합니다.");
-                    player.hit(monster);
-                    logdamage(player,monster);
+                    Log::logprint("몬스터를 만났습니다. 서로를 공격합니다.");
+                    for(int i=0;i<monster_num;i++){
+                        if(monster[i].pos.x==player.pos.x&&monster[i].pos.y==player.pos.y+2){
+                            player.hit(monster[i]);
+                            Log::logdamage(player,monster[i]);
+                            break;
+                        }
+                    }
+                    
                     break;
                 }
                 player.pos.right();
-                logprint("오른쪽으로 이동");
+                Log::logprint("오른쪽으로 이동");
                 break;
             }
             if(player.hp<=0){
                 gameover();
             }
-            else if(monster.hp<=0){
-                gamemap.monster_num--;
-                logprint(monster.name+"을 무찔렀습니다.");
+            for(int i=0;i<monster_num;i++){
+                if(monster[i].hp==0){
+                    Log::logprint(monster[i].name+"을 무찔렀습니다.");
+                    gamemap.monster_num--;
+                    monster_num--;
+                    monster.erase(monster.begin()+i);
+                }
+            }
+            if(monster_num==0){
+                gamewin();
             }
             gamemap.player_pos = player.pos;
-            //player.pos.show();
-            gamemap.Show_map();
+            gamemap.Show_map(monster_num);
         }
         
     }

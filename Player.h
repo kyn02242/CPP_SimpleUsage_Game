@@ -2,8 +2,6 @@
 #include "Character.h"
 #include <bits/stdc++.h>
 #include "Monster.h"
-//#include<curses.h>
-#include <termio.h>
 
 
 

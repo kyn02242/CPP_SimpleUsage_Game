@@ -8,24 +8,30 @@
 using namespace std;
 #define gotoxy(x, y) printf("\033[%d;%dH", (x), (y))
 
-void freshing()
+class Fresh
 {
-    gotoxy(0, 0);
-    for (int i = 0; i < 10; i++)
+    public:
+    static void freshing(int height=10, int width=44)
     {
-        cout << "                                                                                                                                                                                      " << endl;//62개의 빈칸
+        gotoxy(0, 0);
+        for (int i = 0; i < height; i++)
+        {
+            for(int j=0;j<width;j++){
+                cout<<" ";
+            }
+            cout<<endl;
+        }
+        gotoxy(0, 0);
     }
-    gotoxy(0, 0);
-}
+};
 
 class Map
 {
 public:
     vector<vector<string>> game_map;
     Position player_pos;
-    //Position *monster_posarr;
-    Position monster_pos;
-    int monster_num=1;
+    vector<Position> monster_pos;
+    int monster_num;
 
 public:
     Map()
@@ -52,15 +58,12 @@ public:
             }
         }
         player_pos = Position(1, 2);
-        monster_pos = Position(1, 4);
         game_map[player_pos.x][player_pos.y] = "●";
-        if(monster_num>0){
-            game_map[monster_pos.x][monster_pos.y] = "☎";
-        }
     }
-    Map(Player &player, Monster &monster)
-        : player_pos(player.pos), monster_pos(monster.pos), game_map(10, vector<string>(41))
+    Map(int n)
+        : game_map(10, vector<string>(41)),monster_num(n)
     {
+        monster_pos = vector<Position>(monster_num);
         for (int i = 0; i < 41; i += 2)
         {
             game_map[0][i] = "■";
@@ -81,14 +84,19 @@ public:
                 }
             }
         }
+        player_pos = Position(1, 2);
         game_map[player_pos.x][player_pos.y] = "●";
-        if(monster_num>0){
-            game_map[monster_pos.x][monster_pos.y] = "☎";
+        for (int i=0;i<monster_num;i++)
+        {
+            game_map[monster_pos[i].x][monster_pos[i].y] = "☎";
         }
     }
-    void Show_map()
+    void Show_map(int n)
     {
-        //freshing();
+        monster_num = n;
+        for(int i=0;i<n;i++){
+            monster_pos[i].show();
+        }
         gotoxy(0,0);
 
         for (int i = 0; i <= 40; i += 2)
@@ -112,8 +120,9 @@ public:
             }
         }
         game_map[player_pos.x][player_pos.y] = "●";
-        if(monster_num>0){
-            game_map[monster_pos.x][monster_pos.y] = "☎";
+        for (int i=0;i<monster_num;i++)
+        {
+            game_map[monster_pos[i].x][monster_pos[i].y] = "☎";
         }
         for (int i = 0; i < 10; i++)
         {
